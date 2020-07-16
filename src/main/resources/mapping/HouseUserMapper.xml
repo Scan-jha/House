@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="house.jha.house.mapper.HouseUserMapper">
+    <resultMap id="house" type="house.jha.house.model.HouseMsg">
+        <id property="hid" column="hid"></id>
+        <result property="hcode" column="hcode"></result>
+        <result property="hsize" column="hsize"></result>
+        <result property="hprice" column="hprice"></result>
+        <result property="harea" column="harea"></result>
+        <association property="houseType" javaType="house.jha.house.model.HouseType">
+            <id property="tid" column="tid"></id>
+            <result property="tname" column="tname"></result>
+        </association>
+        <association property="houseUser" javaType="house.jha.house.model.HouseUser">
+            <id property="userId" column="userid"></id>
+            <result property="usercode" column="usercode"></result>
+            <result property="userpwd" column="userpwd"></result>
+        </association>
+    </resultMap>
+    <select id="allHouse" resultMap="house">
+        select * from house_msg hm inner join house_userinfo hu on hm.userid=hu.userid inner join house_type ht on
+        hm.tid=ht.tid
+    </select>
+
+    <select id="House" resultMap="house">
+        select * from house_msg hm inner join house_userinfo hu on hm.userid=hu.userid inner join house_type ht on
+        hm.tid=ht.tid where hm.hid=#{hid}
+    </select>
+
+    <select id="getHouse" resultMap="house">
+        select * from house_msg hm inner join house_userinfo hu on hm.userid=hu.userid inner join house_type ht on
+        hm.tid=ht.tid
+    </select>
+
+    <select id="allHouseUser" resultType="HouseUser">
+        select * from house_userinfo where usercode=#{usercode} and userpwd=#{userpwd}
+    </select>
+
+
+    <select id="allHouseType" resultType="HouseType">
+        select * from house_type
+    </select>
+
+    <insert id="addHouse">
+        insert into house_msg
+        values(house_msg_hid_seq.nextval,#{hcode},#{tid.tid},#{hsize},#{hprice},#{harea},#{userid.userId})
+    </insert>
+
+    <delete id="deleteHouse">
+        delete house_msg where hid=#{hid}
+    </delete>
+</mapper>
